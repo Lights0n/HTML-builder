@@ -10,17 +10,14 @@ fs.readdir(path.join(__dirname, "./secret-folder"), { withFileTypes: true }, fun
   directody.forEach(file => {
 
     if (file.isFile()) {
-      //  TODO remove comment andmake it work
-      // let fileSize = fs.stat((file.name), (err, stats) => { return stats.size });
-      const fileName = file.name.slice(0, file.name.length - path.extname(file.name).length)
-      const fileFormat = path.extname(file.name)
-      console.log(fileName, " - ", fileFormat, ' - ', /* fileSize */);
+
+      fs.stat(path.join(__dirname, `./secret-folder/${file.name}`), (err, stats) => {
+        const fileName = file.name.slice(0, file.name.length - path.extname(file.name).length)
+        const fileFormat = path.extname(file.name)
+        console.log(fileName, " - ", fileFormat, ' - ', stats.size + 'b');
+      });
 
     }
 
   })
-  console.log(fs.stat(path.join(__dirname, "./secret-folder/script.js"), (err, stats) => {
-    console.log(stats.size);
-  }));
-
 })
