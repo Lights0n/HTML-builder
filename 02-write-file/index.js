@@ -23,7 +23,7 @@ process.stdin.on('data', function (data) {
   fs.writeFile(path.join(__dirname, filename), data.toString(), { flag: 'a+' }, (err) => {
     if (err) throw err;
   });
-  process.stdout.write(`You whote "${data.toString().trim()}" ${filename.toString().slice(2)}\n`);
+  process.stdout.write(`You wrote "${data.toString().trim()}" ${filename.toString().slice(2)}\n`);
 })
 
 // oncancel events

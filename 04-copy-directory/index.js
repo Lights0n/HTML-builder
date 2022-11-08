@@ -21,8 +21,6 @@ function copyDir() {
     }
     directory.forEach(file => {
 
-
-
       fs.copyFile(path.join(__dirname, 'files',file.name), path.join(__dirname, 'files-copy', file.name), (err) => {
         if (err) {
           console.log("Oops! An Error Occured:", err);
