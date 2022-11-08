@@ -10,7 +10,6 @@ async function makeDirectory() {
 }
 makeDirectory().catch(console.error);
 
-
 // copy to 
 async function copyTemplate() {
   const { copyFile, readdir } = require('node:fs/promises');
@@ -27,21 +26,20 @@ async function copyTemplate() {
     });
 
   })
-  // replacement
-  async function replaceExes(pathFileToChange, regEX, inputInstead) {
-    const fs = require('fs').promises;
-    const data = await fs.readFile(pathFileToChange, 'utf8', (err) => { console.log(err); });
-    // let data = 
-    const result = data.replace(regEX, inputInstead);
-    await fs.writeFile(pathFileToChange, result, 'utf8');
-  }
-  const pathFileToChange = path.join(__dirname, "project-dist", "index.html");
-  replaceExes(pathFileToChange, "{{header}}", "hohohoho");
 
 }
 copyTemplate()
 
-
+// replacement
+async function replaceExes(pathFileToChange, regEX, inputInstead) {
+  const fs = require('fs').promises;
+  const data = await fs.readFile(pathFileToChange, 'utf8', (err) => { console.log(err); });
+  // let data = 
+  const result = data.replace(regEX, inputInstead);
+  await fs.writeFile(pathFileToChange, result, 'utf8');
+}
+const pathFileToChange = path.join(__dirname, "project-dist", "index.html")
+replaceExes(pathFileToChange, "{{header}}", "hohohoho")
 
 
 // bundle styles (6)
