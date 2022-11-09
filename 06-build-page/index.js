@@ -4,42 +4,62 @@ const path = require('path');
 async function makeDirectory() {
   // create directory
   const projectFolder = path.join(__dirname, "project-dist");
-  const dirCreation = await fs.mkdir(projectFolder, { recursive: true }, (err) => {
-    if (err) { console.log(err); }
+  await fs.mkdir(projectFolder, { recursive: true }, (err) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
   });
 }
-makeDirectory().catch(console.error);
+// makeDirectory().catch(console.error);
 
 // copy to 
 async function copyTemplate() {
   const { copyFile, readdir } = require('node:fs/promises');
-  let inner = await fs.readdir(path.join(__dirname), { withFileTypes: true }, function showFiles(err, directory) {
+  await fs.readdir(path.join(__dirname), { withFileTypes: true }, async function showFiles(err, directory) {
 
     if (err) {
       console.log(err);
+      return;
     }
 
-    fs.copyFile(path.join(__dirname, "./template.html"), path.join(__dirname, "project-dist", "index.html"), (err) => {
+    await fs.copyFile(path.join(__dirname, "./template.html"), path.join(__dirname, "project-dist", "index.html"), (err) => {
+
       if (err) {
         console.log("Oops! An Error Occured:", err);
+        return;
       }
     });
 
   })
 
 }
-copyTemplate()
+// copyTemplate()
 
 // replacement
-async function replaceExes(pathFileToChange, regEX, inputInstead) {
-  const fs = require('fs').promises;
-  const data = await fs.readFile(pathFileToChange, 'utf8', (err) => { console.log(err); });
-  // let data = 
-  const result = data.replace(regEX, inputInstead);
-  await fs.writeFile(pathFileToChange, result, 'utf8');
-}
 const pathFileToChange = path.join(__dirname, "project-dist", "index.html")
-replaceExes(pathFileToChange, "{{header}}", "hohohoho")
+
+async function replaceExes(pathFileToChange, regEX, inputInstead) {
+  // const fs = require('fs').promises;
+  await fs.readFile(pathFileToChange, 'utf-8', (errOuter, contents) => {
+    if (errOuter) {
+      return console.error(errOuter)
+    }
+
+    // Replace string occurrences
+    const updated = contents.replace(regEX, inputInstead)
+
+    // Write back to file
+    fs.writeFile(pathFileToChange, updated, 'utf-8', errInner => {
+      if (errInner) {
+        console.log(errInner)
+      }
+    })
+  })
+
+
+}
+
 
 
 // bundle styles (6)
@@ -61,7 +81,7 @@ async function bundleStyles(directFrom, directTo, bundleName) {
               console.log(err);
             } else {
 
-              writeStream.write(data)
+              await writeStream.write(data)
             }
           });
         }
@@ -72,6 +92,13 @@ async function bundleStyles(directFrom, directTo, bundleName) {
   })
 }
 
-let stylesDirectFrom = path.join(__dirname, "./styles")
-let stylesDirectTo = path.join(__dirname, "./project-dist")
-bundleStyles(stylesDirectFrom, stylesDirectTo, "style.css")
+
+async function main() {
+  let stylesDirectFrom = path.join(__dirname, "./styles")
+  let stylesDirectTo = path.join(__dirname, "./project-dist")
+  await makeDirectory().catch(console.error);
+  await copyTemplate();
+  replaceExes(pathFileToChange, "{{header}}", "hohohoho")
+  bundleStyles(stylesDirectFrom, stylesDirectTo, "style.css")
+}
+main()
