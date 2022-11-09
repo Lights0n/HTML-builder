@@ -14,7 +14,7 @@ fs.readdir(path.join(__dirname, "./secret-folder"), { withFileTypes: true }, fun
       fs.stat(path.join(__dirname, `./secret-folder/${file.name}`), (err, stats) => {
         const fileName = file.name.slice(0, file.name.length - path.extname(file.name).length)
         const fileFormat = path.extname(file.name)
-        console.log(fileName, " - ", fileFormat, ' - ', stats.size + 'b');
+        console.log(fileName, " - ", fileFormat.slice(1), ' - ', stats.size + 'b');
       });
 
     }

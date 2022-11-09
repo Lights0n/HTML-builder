@@ -15,15 +15,16 @@ async function makeDirectory() {
 
 // copy to 
 async function copyTemplate() {
+  console.log(path.join(__dirname, "project-dist", "index.html"));
   const { copyFile, readdir } = require('node:fs/promises');
-  await fs.readdir(path.join(__dirname), { withFileTypes: true }, async function showFiles(err, directory) {
+  await fs.readdir(path.join(__dirname), { withFileTypes: true }, function showFiles(err, directory) {
 
     if (err) {
       console.log(err);
       return;
     }
 
-    await fs.copyFile(path.join(__dirname, "./template.html"), path.join(__dirname, "project-dist", "index.html"), (err) => {
+    fs.copyFile(path.join(__dirname, "./template.html"), path.join(__dirname, "project-dist", "index.html"), (err) => {
 
       if (err) {
         console.log("Oops! An Error Occured:", err);
