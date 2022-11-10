@@ -4,41 +4,36 @@ const mkdir = require('node:fs/promises')
 const { copyFile, readdir } = require('node:fs/promises')
 const projectFolder = path.join(__dirname, 'files-copy');
 const folder = path.join(__dirname, 'files');
-function copyDir() {
+async function copyDir() {
 
-  fs.stat(projectFolder, async function (err, stats) {
+  await fs.stat(projectFolder, async function (err) {
     // если папка есть
-   /*  if (!err) {
+    if (!err) {
       console.log('Ё Надо удалить и создать!');
-      async function lalo() {
-        await fs.readdir(projectFolder, { withFileTypes: true }, async function showFiles(err, directory) {
 
-          if (err) {
-            console.log(err);
-          }
-          for (let file of directory) {
-
-            try {
-              await fs.rm(path.join(projectFolder, file.name), (err) => {
-                console.log(err);
-              });
-            } catch (err) {
-              console.log(directory);
+      await fs.readdir(projectFolder, { withFileTypes: true }, function showFiles(err, directory) {
+        if (err) {
+          console.log(err);
+        }
+        for (let file of directory) {
+          fs.unlink(path.join(projectFolder, file.name), (err) => {
+            if (err) {
+              console.log(err);
             }
+          });
+        }
 
-          }
-
-        })
-        await fs.rmdir(projectFolder, (err) => {
-          if (err) console.log(err);;
-        });
-      }
-      await lalo();
+      })
+      // await fs.rmdir(projectFolder, (err) => {
+      //   if (err) console.log(err);;
+      // });
 
 
 
-    } */
-
+    }
+    else {
+      console.log('Heh');
+    }
     /* console.log('НЯМА'); */
     async function makeDirectory() {
       // create dorectory
